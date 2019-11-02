@@ -4,8 +4,17 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from oratioapi.models import Event
+# from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from oratioapi.models import Event, Speech, SpeechEvent
+from .speech import SpeechSerializer
+from .speechevent import SpeechEventSerializer
+from django.contrib.auth.models import User
+# from oratioapi.views.speechevent import
+
+"""
+Purpose: Allows a user to communicate with the Oratio database to GET POST and DELETE entries for events.
+Methods: GET DELETE(id) POST
+"""
 
 class EventSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for events
@@ -13,18 +22,19 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
     Arguments:
         serializers
     """
+
+    speeches = SpeechSerializer(many=True)
     class Meta:
         model = Event
         url = serializers.HyperlinkedIdentityField(
             view_name='event',
             lookup_field='id'
         )
-        fields = ('id', 'url', 'name')
+        fields = ('id', 'url', 'name', 'speeches')
         depth = 2
 
 class Events(ViewSet):
 
-    permission_classes = (IsAuthenticatedOrReadOnly,)
     def create(self, request):
 
         """Handle POST operations
@@ -33,13 +43,29 @@ class Events(ViewSet):
             Response -- JSON serialized ProductType instance
         """
 
-        new_event = Event()
-        new_event.name = request.data["name"]
-        new_event.save()
+        speech_event = SpeechEvent()
+        speech = request.data["speech_id"]
 
-        serializer = EventSerializer(new_event, context={'request': request})
+        # current_user = User.objects.get(pk=request.user.id)
+        event = Event.objects.filter(name=request.data["name"])
 
-        return Response(serializer.data)
+        if event.exists():
+            print("Event in db. Add it and the speech to SpeechEvent")
+            speech_event.event = event[0]
+            if speech is not None:
+                speech_event.speech = Speech.objects.get(pk=speech)
+        else:
+            print("No event by this name. Make new event to add speech to")
+            new_event = Event()
+            new_event.name = request.data["name"]
+            new_event.save()
+            speech_event.event = new_event
+
+        speech_event.save()
+
+        # serializer = EventSerializer(speech_event, context={'request': request})
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, pk=None):
         """Handle GET requests for single eventt
@@ -55,16 +81,39 @@ class Events(ViewSet):
             return HttpResponseServerError(ex)
 
     def update(self, request, pk=None):
-        """Handle PUT requests for a product type
+        """Handle PUT requests for events
 
         Returns:
             Response -- Empty body with 204 status code
         """
         event = Event.objects.get(pk=pk)
         event.name = request.data["name"]
-        event.save()
+        speech = request.data["speech_id"]
+
+        if speech is not None:
+            event.speech = Speech.objects.get(pk=speech)
+            event.save()
+
+        # if event.name is not None:
+        #     event.nam
+
+        else:
+            speech = Speech.objects.get(pk=request.data["speech_id"])
+            speechevent = SpeechEvent.objects.filter(event=event, speech=speech)[0]
+            speechevent.delete()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        order = Order.objects.get(pk=pk)
+        product = request.data["item_id"]
+
+        if request.data["payment_type_id"]:
+            order.payment_type_id = PaymentType.objects.get(pk=request.data["payment_type_id"])
+            order.save()
+        else:
+            product = Product.objects.get(pk=request.data["item_id"])
+            orderproduct = OrderProduct.objects.filter(order=order, product=product)[0]
+            orderproduct.delete()
 
     def destroy(self, request, pk=None):
         """Handle DELETE requests for a single product type
@@ -91,6 +140,8 @@ class Events(ViewSet):
             Response -- JSON serialized list of product types
         """
         events = Event.objects.all()
+        # events = events.filter(user_id=request.user.id)
+        print("events", events)
 
         serializer = EventSerializer(
             events, many=True, context={'request': request})

@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from oratioapi.models import Speech
+from django.contrib.auth.models import User
 
 class SpeechSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for speeches
@@ -17,7 +18,7 @@ class SpeechSerializer(serializers.HyperlinkedModelSerializer):
             view_name='speech',
             lookup_field='id'
         )
-        fields = ('id', 'url', 'user', 'date', 'set_time', 'actual_time', 'transcript', 'um', 'uh', 'like')
+        fields = ('id', 'url', 'user', 'title', 'date', 'set_time', 'actual_time', 'transcript', 'um', 'uh', 'like')
         depth = 2
 
 class Speeches(ViewSet):
@@ -29,7 +30,8 @@ class Speeches(ViewSet):
             Response -- JSON serialized Speech instance
         """
         new_speech = Speech()
-        new_speech.user = request.auth.user
+        new_speech.user = User.objects.get(pk=request.user.pk)
+        new_speech.title = request.data["title"]
         new_speech.date = request.data["date"]
         new_speech.set_time = request.data["set_time"]
         new_speech.actual_time = request.data["actual_time"]
@@ -64,7 +66,12 @@ class Speeches(ViewSet):
             Response -- Empty body with 204 status code
         """
         speech = Speech.objects.get(pk=pk)
-        speech.starttime = request.data["starttime"]
+        speech.actual_time = request.data["actual_time"]
+        speech.transcript = request.data["transcript"]
+        speech.um = request.data["um"]
+        speech.uh = request.data["uh"]
+        speech.like = request.data["like"]
+
         speech.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
@@ -93,8 +100,14 @@ class Speeches(ViewSet):
         Returns:
             Response -- JSON serialized list of speeches
         """
-        # customer = Customer.objects.get(user=request.auth.user)
-        speeches = Speech.objects.filter(user=request.auth.user)
+        speeches = Speech.objects.filter(user=request.user.pk)
+
+        incomplete = self.request.query_params.get('incomplete', None)
+
+        if incomplete is not None:
+            # speeches = Speech.objects.filter(actual_time__isnull=True)
+            speeches = Speech.objects.filter(actual_time=None)
+
 
         serializer = SpeechSerializer(
             speeches, many=True, context={'request': request})

@@ -14,7 +14,6 @@ class Speech(models.Model):
     um = models.IntegerField(blank=True, null=True)
     uh = models.IntegerField(blank=True, null=True)
     like = models.IntegerField(blank=True, null=True)
-    events = models.ManyToManyField("Event", through="SpeechEvent", related_name="speeches")
 
     class Meta:
         verbose_name = ("speech")
