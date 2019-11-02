@@ -104,17 +104,6 @@ class Events(ViewSet):
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-        order = Order.objects.get(pk=pk)
-        product = request.data["item_id"]
-
-        if request.data["payment_type_id"]:
-            order.payment_type_id = PaymentType.objects.get(pk=request.data["payment_type_id"])
-            order.save()
-        else:
-            product = Product.objects.get(pk=request.data["item_id"])
-            orderproduct = OrderProduct.objects.filter(order=order, product=product)[0]
-            orderproduct.delete()
-
     def destroy(self, request, pk=None):
         """Handle DELETE requests for a single product type
 
