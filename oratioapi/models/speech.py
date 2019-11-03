@@ -9,7 +9,7 @@ class Speech(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="speeches")
     title = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    prompt = models.ForeignKey(Prompt, on_delete=models.DO_NOTHING, null=True, blank=True, related_name="speech")
+    prompt = models.ForeignKey(Prompt, on_delete=models.DO_NOTHING, null=True, blank=True)
     set_time = models.IntegerField(blank=True, null=True)
     actual_time = models.IntegerField(blank=True, null=True)
     transcript = models.TextField(blank=True, null=True)

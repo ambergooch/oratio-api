@@ -3,7 +3,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from oratioapi.models import Speech
+from oratioapi.models import Speech, Prompt
 from django.contrib.auth.models import User
 
 class SpeechSerializer(serializers.HyperlinkedModelSerializer):
@@ -18,7 +18,7 @@ class SpeechSerializer(serializers.HyperlinkedModelSerializer):
             view_name='speech',
             lookup_field='id'
         )
-        fields = ('id', 'url', 'user', 'title', 'date', 'set_time', 'actual_time', 'transcript', 'um', 'uh', 'like')
+        fields = ('id', 'url', 'user', 'title', 'date', 'prompt', 'set_time', 'actual_time', 'transcript', 'um', 'uh', 'like')
         depth = 2
 
 class Speeches(ViewSet):
@@ -34,11 +34,15 @@ class Speeches(ViewSet):
         new_speech.title = request.data["title"]
         new_speech.date = request.data["date"]
         new_speech.set_time = request.data["set_time"]
-        new_speech.actual_time = request.data["actual_time"]
-        new_speech.transcript = request.data["transcript"]
-        new_speech.um = request.data["um"]
-        new_speech.uh = request.data["uh"]
-        new_speech.like = request.data["like"]
+        # new_speech.actual_time = request.data["actual_time"]
+        # new_speech.transcript = request.data["transcript"]
+        # new_speech.um = request.data["um"]
+        # new_speech.uh = request.data["uh"]
+        # new_speech.like = request.data["like"]
+
+        if request.data["prompt"]:
+            new_speech.prompt = Prompt.objects.get(pk=request.data["prompt"])
+
 
         new_speech.save()
 

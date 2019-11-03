@@ -19,7 +19,7 @@ class PromptSerializer(serializers.HyperlinkedModelSerializer):
             view_name='prompt',
             lookup_field='id'
         )
-        fields = ('id', 'url', 'question', 'speech')
+        fields = ('id', 'url', 'prompt')
         depth = 2
 
 class Prompts(ViewSet):
@@ -34,8 +34,7 @@ class Prompts(ViewSet):
         """
 
         new_prompt = Prompt()
-        new_prompt.question = request.data["question"]
-        new_prompt.speech = Speech.objects.get(pk=request.data['speech_id'])
+        new_prompt.prompt = request.data["prompt"]
         new_prompt.save()
 
         serializer = PromptSerializer(new_prompt, context={'request': request})
@@ -62,7 +61,7 @@ class Prompts(ViewSet):
             Response -- Empty body with 204 status code
         """
         prompt = Prompt.objects.get(pk=pk)
-        prompt.question = request.data["question"]
+        prompt.prompt = request.data["prompt"]
         prompt.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)

@@ -1,5 +1,4 @@
 from django.db import models
-from .speech import Speech
 
 class Prompt(models.Model):
 

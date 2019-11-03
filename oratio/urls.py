@@ -26,6 +26,7 @@ router.register(r'events', Events, 'event')
 router.register(r'speeches', Speeches, 'speech')
 router.register(r'prompts', Prompts, 'prompt')
 router.register(r'users', Users, 'user')
+router.register(r'speechevents', SpeechEvents, 'speechevent')
 
 urlpatterns = [
     url(r'^', include(router.urls)),

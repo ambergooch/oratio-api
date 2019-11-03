@@ -43,25 +43,24 @@ class Events(ViewSet):
             Response -- JSON serialized ProductType instance
         """
 
-        speech_event = SpeechEvent()
-        speech = request.data["speech_id"]
 
         # current_user = User.objects.get(pk=request.user.id)
         event = Event.objects.filter(name=request.data["name"])
 
         if event.exists():
             print("Event in db. Add it and the speech to SpeechEvent")
+            speech_event = SpeechEvent()
+            speech_event.speech = Speech.objects.get(pk=request.data["speech_id"])
             speech_event.event = event[0]
-            if speech is not None:
-                speech_event.speech = Speech.objects.get(pk=speech)
+            speech_event.save()
         else:
             print("No event by this name. Make new event to add speech to")
             new_event = Event()
             new_event.name = request.data["name"]
             new_event.save()
-            speech_event.event = new_event
+            # speech_event.event = new_event
 
-        speech_event.save()
+
 
         # serializer = EventSerializer(speech_event, context={'request': request})
 
@@ -87,7 +86,7 @@ class Events(ViewSet):
             Response -- Empty body with 204 status code
         """
         event = Event.objects.get(pk=pk)
-        event.name = request.data["name"]
+        # event.name = request.data["name"]
         speech = request.data["speech_id"]
 
         if speech is not None:
@@ -103,6 +102,17 @@ class Events(ViewSet):
             speechevent.delete()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        # order = Order.objects.get(pk=pk)
+        # product = request.data["item_id"]
+
+        # if request.data["payment_type_id"]:
+        #     order.payment_type_id = PaymentType.objects.get(pk=request.data["payment_type_id"])
+        #     order.save()
+        # else:
+        #     product = Product.objects.get(pk=request.data["item_id"])
+        #     orderproduct = OrderProduct.objects.filter(order=order, product=product)[0]
+        #     orderproduct.delete()
 
     def destroy(self, request, pk=None):
         """Handle DELETE requests for a single product type
