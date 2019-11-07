@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from .prompt import Prompt
+from datetime import datetime
 
 
 class Speech(models.Model):
@@ -21,5 +22,13 @@ class Speech(models.Model):
         verbose_name = ("speech")
         verbose_name_plural = ("speeches")
 
+    @property
+    def convert_date(self):
+        return datetime.datetime.strptime(str(self.date), '%Y-%m-%dT%H:%M:%S.%fZ').date()
+        # .strftime('%m/%d/%Y %H:%M:%S')
+
     def __str__(self):
         return self.transcript
+
+
+

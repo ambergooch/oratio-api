@@ -18,7 +18,7 @@ class SpeechSerializer(serializers.HyperlinkedModelSerializer):
             view_name='speech',
             lookup_field='id'
         )
-        fields = ('id', 'url', 'user', 'title', 'date', 'prompt', 'set_time', 'actual_time', 'transcript', 'um', 'uh', 'like')
+        fields = ('id', 'url', 'user', 'title', 'date', 'prompt', 'set_time', 'actual_time', 'transcript', 'um', 'uh', 'like', 'convert_date')
         depth = 2
 
 class Speeches(ViewSet):
@@ -107,10 +107,14 @@ class Speeches(ViewSet):
         speeches = Speech.objects.filter(user=request.user.pk)
 
         incomplete = self.request.query_params.get('incomplete', None)
+        complete = self.request.query_params.get('complete', None)
 
         if incomplete is not None:
-            # speeches = Speech.objects.filter(actual_time__isnull=True)
-            speeches = Speech.objects.filter(actual_time=None)
+            speeches = Speech.objects.filter(user=request.user.pk, actual_time=None)
+
+        if complete is not None:
+            speeches = Speech.objects.filter(user=request.user.pk).exclude(actual_time=None)
+
 
 
         serializer = SpeechSerializer(

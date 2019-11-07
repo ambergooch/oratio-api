@@ -52,7 +52,12 @@ class Users(ViewSet):
         Returns:
             Response -- JSON serialized list of park areas
         """
-        users = Users.objects.all()
+        users = User.objects.all()
+
+        currentuser = self.request.query_params.get('currentuser', None)
+        if currentuser is not None:
+            User.objects.filter(id=request.user.pk)
+
         serializer = UserSerializer(
             users, many=True, context={'request': request})
         return Response(serializer.data)

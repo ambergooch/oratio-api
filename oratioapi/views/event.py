@@ -103,17 +103,6 @@ class Events(ViewSet):
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-        # order = Order.objects.get(pk=pk)
-        # product = request.data["item_id"]
-
-        # if request.data["payment_type_id"]:
-        #     order.payment_type_id = PaymentType.objects.get(pk=request.data["payment_type_id"])
-        #     order.save()
-        # else:
-        #     product = Product.objects.get(pk=request.data["item_id"])
-        #     orderproduct = OrderProduct.objects.filter(order=order, product=product)[0]
-        #     orderproduct.delete()
-
     def destroy(self, request, pk=None):
         """Handle DELETE requests for a single product type
 
@@ -139,8 +128,16 @@ class Events(ViewSet):
             Response -- JSON serialized list of product types
         """
         events = Event.objects.all()
+
+        withspeeches = self.request.query_params.get('withspeeches', None)
+
+        if withspeeches is not None:
+            for event in events:
+                events = Event.objects.exclude(speeches=None)
+                # event.speeches = related_speeches
+
         # events = events.filter(user_id=request.user.id)
-        print("events", events)
+
 
         serializer = EventSerializer(
             events, many=True, context={'request': request})
