@@ -1,0 +1,30 @@
+[
+    {
+        "model": "oratioapi.event",
+        "pk": 1,
+        "fields": {
+            "name": "Demo Day"
+        }
+    },
+    {
+        "model": "oratioapi.event",
+        "pk": 2,
+        "fields": {
+            "name": "92nd Annual Academy Awards"
+        }
+    },
+    {
+        "model": "oratioapi.event",
+        "pk": 3,
+        "fields": {
+            "name": "PyNash Meeting"
+        }
+    },
+    {
+        "model": "oratioapi.event",
+        "pk": 4,
+        "fields": {
+            "name": "Jr. Chamber of Commerce Conference"
+        }
+    }
+]

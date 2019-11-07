@@ -14,8 +14,8 @@ class Speech(models.Model):
     set_time = models.IntegerField(blank=True, null=True)
     actual_time = models.IntegerField(blank=True, null=True)
     transcript = models.TextField(blank=True, null=True)
-    um = models.IntegerField(blank=True, null=True)
-    uh = models.IntegerField(blank=True, null=True)
+    well = models.IntegerField(blank=True, null=True)
+    so = models.IntegerField(blank=True, null=True)
     like = models.IntegerField(blank=True, null=True)
 
     class Meta:

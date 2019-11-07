@@ -18,7 +18,7 @@ class SpeechSerializer(serializers.HyperlinkedModelSerializer):
             view_name='speech',
             lookup_field='id'
         )
-        fields = ('id', 'url', 'user', 'title', 'date', 'prompt', 'set_time', 'actual_time', 'transcript', 'um', 'uh', 'like', 'convert_date')
+        fields = ('id', 'url', 'user', 'title', 'date', 'prompt', 'set_time', 'actual_time', 'transcript', 'well', 'so', 'like', 'convert_date')
         depth = 2
 
 class Speeches(ViewSet):
@@ -72,8 +72,8 @@ class Speeches(ViewSet):
         speech = Speech.objects.get(pk=pk)
         speech.actual_time = request.data["actual_time"]
         speech.transcript = request.data["transcript"]
-        speech.um = request.data["um"]
-        speech.uh = request.data["uh"]
+        speech.so = request.data["so"]
+        speech.well = request.data["well"]
         speech.like = request.data["like"]
 
         speech.save()
