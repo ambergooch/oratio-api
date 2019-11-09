@@ -1,0 +1,58 @@
+[
+    {
+        "model": "oratioapi.prompt",
+        "pk": 1,
+        "fields": {
+            "prompt": "Where would you like to be in your career five years from now?"
+        }
+    },
+    {
+        "model": "oratioapi.prompt",
+        "pk": 2,
+        "fields": {
+            "prompt": "Have you ever been on a team where someone was not pulling their own weight? How did you handle it?"
+        }
+    },
+    {
+        "model": "oratioapi.prompt",
+        "pk": 3,
+        "fields": {
+            "prompt": "What is your greatest strength and your greatest weakness?"
+        }
+    },
+    {
+        "model": "oratioapi.prompt",
+        "pk": 4,
+        "fields": {
+            "prompt": "Tell me about a challenge or conflict you've faced, and how you dealt with it."
+        }
+    },
+    {
+        "model": "oratioapi.prompt",
+        "pk": 5,
+        "fields": {
+            "prompt": "What is your greatest professional achievement?"
+        }
+    },
+    {
+        "model": "oratioapi.prompt",
+        "pk": 6,
+        "fields": {
+            "prompt": "Describe how you would handle a situation if you were required to finish multiple tasks by the end of the day, and there was no conceivable way that you could finish them."
+        }
+    },
+    {
+        "model": "oratioapi.prompt",
+        "pk": 7,
+        "fields": {
+            "prompt": "Why did you decide to attend NSS?"
+        }
+    },
+    {
+        "model": "oratioapi.prompt",
+        "pk": 8,
+        "fields": {
+            "prompt": "Tell me about a project that you are excited about."
+        }
+    }
+]

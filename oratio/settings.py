@@ -67,7 +67,9 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
-    'http://127.0.0.1:3000'
+    'http://127.0.0.1:3000',
+    'http://localhost:4000',
+    'http://127.0.0.1:4000'
 )
 
 ROOT_URLCONF = 'oratio.urls'
@@ -126,13 +128,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-DATETIME_FORMAT= '%d-%m-%Y %H:%M:%S'
+DATETIME_FORMAT= '%d-%m-%Y %H:%M'
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 

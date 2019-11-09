@@ -1,13 +1,11 @@
 from django.db import models
-from .speech import Speech
 
 class Prompt(models.Model):
 
     """
     Creates table for interview question prompts
     """
-    question = models.CharField(max_length = 55)
-    speech = models.ForeignKey(Speech, on_delete=models.CASCADE, related_name="prompt")
+    prompt = models.TextField()
 
     class Meta:
         verbose_name = ("prompt")
