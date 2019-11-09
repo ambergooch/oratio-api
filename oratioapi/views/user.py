@@ -56,7 +56,7 @@ class Users(ViewSet):
 
         currentuser = self.request.query_params.get('currentuser', None)
         if currentuser is not None:
-            User.objects.filter(id=request.user.pk)
+            users = User.objects.filter(pk=request.user.id)
 
         serializer = UserSerializer(
             users, many=True, context={'request': request})
